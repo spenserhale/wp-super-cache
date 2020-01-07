@@ -73,8 +73,7 @@ function wp_super_cache_maybe_disable_wptouch( $t ) {
 		return true;
 	}
 
-	$ua = explode( ',', $wptouch_exclude_ua );
-	foreach ( $ua as $agent ) {
+	foreach ( explode( ',', $wptouch_exclude_ua ) as $agent ) {
 		if ( preg_match( "#$agent#i", $_SERVER['HTTP_HOST'] ) ) {
 			return true; // disable mobile ua check if matches the exclude list in wptouch.
 		}

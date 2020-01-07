@@ -433,8 +433,7 @@ function do_cacheaction( $action, $value = '' ) {
 		return $value;
 
 	if( array_key_exists($action, $wp_supercache_actions) && is_array( $wp_supercache_actions[ $action ] ) ) {
-		$actions = $wp_supercache_actions[ $action ];
-		foreach( $actions as $func ) {
+		foreach( $wp_supercache_actions[ $action ] as $func ) {
 			$value = call_user_func_array( $func, array( $value ) );
 		}
 	}
@@ -863,9 +862,8 @@ function supercache_filename() {
 	if ( is_array( $cached_direct_pages ) && in_array( $_SERVER[ 'REQUEST_URI' ], $cached_direct_pages ) ) {
 		$extra_str = '';
 	}
-	$filename = 'index' . $extra_str . '.html';
 
-	return $filename;
+	return 'index' . $extra_str . '.html';
 }
 
 function get_oc_version() {
@@ -1590,8 +1588,7 @@ function wp_cache_get_response_headers() {
 function wp_cache_is_rejected($uri) {
 	global $cache_rejected_uri;
 
-	$auto_rejected = array( '/wp-admin/', 'xmlrpc.php', 'wp-app.php' );
-	foreach( $auto_rejected as $u ) {
+	foreach( array( '/wp-admin/', 'xmlrpc.php', 'wp-app.php' ) as $u ) {
 		if( strstr( $uri, $u ) )
 			return true; // we don't allow caching of wp-admin for security reasons
 	}

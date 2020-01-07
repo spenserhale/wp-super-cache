@@ -2277,8 +2277,7 @@ function wp_cache_is_enabled() {
 		return false;
 	}
 
-	$lines = file( $wp_cache_config_file );
-	foreach ( $lines as $line ) {
+	foreach ( file( $wp_cache_config_file ) as $line ) {
 		if ( preg_match( '/^\s*\$cache_enabled\s*=\s*true\s*;/', $line ) ) {
 			return true;
 		}
@@ -2298,8 +2297,7 @@ function wp_cache_remove_index() {
 	@unlink( $cache_path . "supercache/index.html" );
 	@unlink( $cache_path . "blogs/index.html" );
 	if ( is_dir( $cache_path . "blogs" ) ) {
-		$dir = new DirectoryIterator( $cache_path . "blogs" );
-		foreach( $dir as $fileinfo ) {
+		foreach( new DirectoryIterator( $cache_path . "blogs" ) as $fileinfo ) {
 			if ( $fileinfo->isDot() ) {
 				continue;
 			}
@@ -2459,8 +2457,7 @@ function wp_cache_add_site_cache_index() {
 	wp_cache_add_index_protection(); // root and supercache
 
 	if ( is_dir( $cache_path . "blogs" ) ) {
-		$dir = new DirectoryIterator( $cache_path . "blogs" );
-		foreach( $dir as $fileinfo ) {
+		foreach( new DirectoryIterator( $cache_path . "blogs" ) as $fileinfo ) {
 			if ( $fileinfo->isDot() ) {
 				continue;
 			}
@@ -3536,8 +3533,7 @@ function wp_cron_preload_cache() {
 
 				if ( false == @file_exists( $taxonomy_filename ) ) {
 					$out = '';
-					$records = get_terms( $taxonomy );
-					foreach( $records as $term ) {
+					foreach( get_terms( $taxonomy ) as $term ) {
 						$out .= get_term_link( $term ). "\n";
 					}
 					$fp = fopen( $taxonomy_filename, 'w' );
@@ -3699,8 +3695,7 @@ function next_preload_message( $hook, $text, $limit = 0 ) {
 
 function option_preload_cache_counter( $value ) {
 	if ( false == is_array( $value ) ) {
-		$ret = array( 'c' => $value, 't' => time(), 'first' => 1 );
-		return $ret;
+		return array( 'c' => $value, 't' => time(), 'first' => 1 );
 	}
 
 	return $value;

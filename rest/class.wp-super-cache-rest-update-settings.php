@@ -50,8 +50,7 @@ class WP_Super_Cache_Rest_Update_Settings extends WP_REST_Controller {
 			return rest_ensure_response( $errors );
 
 		} else {
-			$get_settings = new WP_Super_Cache_Rest_Get_Settings();
-			return $get_settings->callback( $request );
+			return ( new WP_Super_Cache_Rest_Get_Settings() )->callback( $request );
 		}
 	}
 

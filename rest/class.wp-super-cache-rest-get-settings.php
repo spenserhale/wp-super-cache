@@ -113,8 +113,7 @@ class WP_Super_Cache_Rest_Get_Settings extends WP_REST_Controller {
 			$settings[ $key ] = $value;
 		}
 
-		$strings_to_bool = array( 'ossdl_https', 'refresh_current_only_on_comments' );
-		foreach( $strings_to_bool as $key ) {
+		foreach( array( 'ossdl_https', 'refresh_current_only_on_comments' ) as $key ) {
 			if ( isset( $settings[ $key ] ) ) {
 				$settings[ $key ] = (bool)$settings[ $key ];
 			}
