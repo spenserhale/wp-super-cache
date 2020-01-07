@@ -803,7 +803,7 @@ function wpsc_delete_files( $dir, $delete = true ) {
 }
 
 function get_all_supercache_filenames( $dir = '' ) {
-	global $wp_cache_mobile_enabled, $cache_path;
+	global $wp_cache_mobile_enabled;
 
 	$dir = wpsc_get_realpath( $dir );
 	if ( ! $dir ) {
@@ -1270,7 +1270,7 @@ function wpsc_shutdown_message() {
 }
 
 function wp_cache_phase2() {
-	global $wp_cache_gzip_encoding, $super_cache_enabled, $cache_rebuild_files, $cache_enabled, $wp_cache_gmt_offset, $wp_cache_blog_charset;
+	global $super_cache_enabled, $cache_rebuild_files, $cache_enabled, $wp_cache_gmt_offset, $wp_cache_blog_charset;
 
 	if ( $cache_enabled == false ) {
 		wp_cache_debug( 'wp_cache_phase2: Caching disabled! Exit' );
@@ -1381,7 +1381,7 @@ function wpsc_register_post_hooks() {
 }
 
 function wpcache_do_rebuild( $dir ) {
-	global $do_rebuild_list, $cache_path, $wpsc_file_mtimes;
+	global $do_rebuild_list, $wpsc_file_mtimes;
 	wp_cache_debug( "wpcache_do_rebuild: doing rebuild for $dir" );
 
 	if ( !is_dir( $dir ) ) {
@@ -1944,8 +1944,8 @@ function wp_cache_get_ob(&$buffer) {
 	global $new_cache, $wp_cache_meta, $cache_compression, $wp_super_cache_query;
 	global $wp_cache_gzip_encoding, $super_cache_enabled;
 	global $gzsize, $supercacheonly;
-	global $blog_cache_dir, $wp_supercache_cache_list;
-	global $wp_cache_not_logged_in, $cache_max_time;
+	global $wp_supercache_cache_list;
+	global $wp_cache_not_logged_in;
 	global $wp_cache_is_home, $wp_cache_front_page_checks, $wp_cache_mfunc_enabled;
 
 	if ( isset( $wp_cache_mfunc_enabled ) == false )
@@ -2315,7 +2315,7 @@ function prune_super_cache( $directory, $force = false, $rename = false ) {
 		return false;
 	}
 
-	global $cache_max_time, $cache_path, $blog_cache_dir;
+	global $cache_max_time;
 	static $log = 0;
 	static $protected_directories = '';
 
@@ -2405,7 +2405,7 @@ function prune_super_cache( $directory, $force = false, $rename = false ) {
 }
 
 function wp_cache_rebuild_or_delete( $file ) {
-	global $cache_rebuild_files, $cache_path, $file_prefix;
+	global $cache_rebuild_files, $file_prefix;
 
 
 	if ( strpos( $file, '?' ) !== false )
@@ -2510,7 +2510,7 @@ function wp_cache_phase2_clean_expired( $file_prefix, $force = false ) {
 }
 
 function wp_cache_shutdown_callback() {
-	global $cache_max_time, $meta_file, $new_cache, $wp_cache_meta, $known_headers, $blog_id, $wp_cache_gzip_encoding, $supercacheonly, $blog_cache_dir;
+	global $meta_file, $new_cache, $wp_cache_meta, $blog_id, $wp_cache_gzip_encoding, $supercacheonly;
 	global $wp_cache_request_uri, $wp_cache_key, $cache_enabled, $wp_cache_blog_charset, $wp_cache_not_logged_in;
 	global $WPSC_HTTP_HOST, $wp_super_cache_query;
 
@@ -2925,7 +2925,7 @@ function wp_cache_post_id_gc( $post_id, $all = 'all' ) {
 }
 
 function wp_cache_post_change( $post_id ) {
-	global $file_prefix, $cache_path, $blog_id, $super_cache_enabled, $blog_cache_dir, $wp_cache_refresh_single_only;
+	global $file_prefix, $blog_id, $super_cache_enabled, $blog_cache_dir, $wp_cache_refresh_single_only;
 	static $last_processed = -1;
 
 	if ( $post_id == $last_processed ) {
