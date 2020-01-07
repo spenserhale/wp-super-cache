@@ -72,13 +72,9 @@ function wp_super_cache_jetpack_cookie_check( $cache_key ) {
 		}
 	}
 
-	if ( function_exists( 'jetpack_is_mobile' ) ) {
-		if ( jetpack_is_mobile() ) {
-			return 'mobile';
-		} else {
-			return 'normal';
-		}
-	} else {
+	if ( function_exists( 'jetpack_is_mobile' ) && jetpack_is_mobile() ) {
+        return 'mobile';
+    } else {
 		return 'normal';
 	}
 }
