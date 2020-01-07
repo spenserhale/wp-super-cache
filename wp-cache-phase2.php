@@ -24,7 +24,7 @@ function get_wp_cache_key( $url = false ) {
 	if ( ! $url ) {
 		$url = $wp_cache_request_uri;
 	}
-	$server_port = isset( $_SERVER[ 'SERVER_PORT' ] ) ? intval( $_SERVER[ 'SERVER_PORT' ] ) : 0;
+	$server_port = isset( $_SERVER[ 'SERVER_PORT' ] ) ? (int) $_SERVER['SERVER_PORT'] : 0;
 	return do_cacheaction( 'wp_cache_key', wp_cache_check_mobile( $WPSC_HTTP_HOST . $server_port . preg_replace('/#.*$/', '', str_replace( '/index.php', '/', $url ) ) . $wp_cache_gzip_encoding . wp_cache_get_cookies_values() ) );
 }
 
@@ -894,7 +894,7 @@ function get_oc_key( $url = false ) {
 	global $wp_cache_gzip_encoding, $WPSC_HTTP_HOST;
 
 	if ( $url ) {
-		$key = intval( $_SERVER[ 'SERVER_PORT' ] ) . preg_replace( '/:.*$/', '',  $WPSC_HTTP_HOST ) . $url;
+		$key = (int) $_SERVER['SERVER_PORT'] . preg_replace( '/:.*$/', '',  $WPSC_HTTP_HOST ) . $url;
 	} else {
 		$key = get_current_url_supercache_dir();
 	}
@@ -1744,7 +1744,7 @@ function wpsc_catch_status_header( $status_header, $code ) {
 function wpsc_catch_http_status_code( $status ) {
 	global $wp_super_cache_query;
 
-	if ( in_array( intval( $status ), array( 301, 302, 303, 307 ) ) ) {
+	if ( in_array( (int) $status, array( 301, 302, 303, 307 ) ) ) {
 		$wp_super_cache_query[ 'is_redirect' ] = 1;
 	} elseif ( $status == 304 ) {
 		$wp_super_cache_query[ 'is_304' ] = 1;
@@ -2919,7 +2919,7 @@ function wp_cache_post_edit( $post_id ) {
 
 function wp_cache_post_id_gc( $post_id, $all = 'all' ) {
 
-	$post_id = intval( $post_id );
+	$post_id = (int) $post_id;
 	if( $post_id == 0 )
 		return true;
 
@@ -2997,7 +2997,7 @@ function wp_cache_post_change( $post_id ) {
 	$all_backup = $all;
 	$all = apply_filters( 'wpsc_delete_related_pages_on_edit', $all ); // return 0 to disable deleting homepage and other pages.
 	if ( $all != $all_backup )
-		wp_cache_debug( 'wp_cache_post_change: $all changed by wpsc_delete_related_pages_on_edit filter: ' . intval( $all ) );
+		wp_cache_debug( 'wp_cache_post_change: $all changed by wpsc_delete_related_pages_on_edit filter: ' . (int) $all );
 
 	// Delete supercache files whenever a post change event occurs, even if supercache is currently disabled.
 	$dir = get_supercache_dir();

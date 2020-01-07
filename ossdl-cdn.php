@@ -68,7 +68,7 @@ function scossdl_off_get_options() {
 	}
 	$ossdl_arr_of_cnames = array_filter( array_map( 'trim', explode( ',', $ossdl_cname ) ) );
 
-	$ossdl_https = intval( get_option( 'ossdl_https' ) );
+	$ossdl_https = (int) get_option( 'ossdl_https' );
 }
 
 /**
