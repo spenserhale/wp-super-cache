@@ -187,12 +187,12 @@ function wp_cache_serve_cache_file() {
 				$headers         = apache_request_headers();
 				$remote_mod_time = isset ( $headers['If-Modified-Since'] ) ? $headers['If-Modified-Since'] : null;
 
-				if ( is_null( $remote_mod_time ) && isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) ) {
+				if ( $remote_mod_time === null && isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) ) {
 					$remote_mod_time = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
 				}
 
 				$local_mod_time = gmdate("D, d M Y H:i:s",filemtime( $file )).' GMT';
-				if ( ! is_null( $remote_mod_time ) && $remote_mod_time == $local_mod_time ) {
+				if ( $remote_mod_time !== null && $remote_mod_time == $local_mod_time ) {
 					header( $_SERVER[ 'SERVER_PROTOCOL' ] . " 304 Not Modified" );
 					exit();
 				}
