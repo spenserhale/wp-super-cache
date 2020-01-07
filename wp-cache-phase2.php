@@ -534,8 +534,7 @@ function wp_cache_debug( $message, $level = 1 ) {
 	$last_message = $message;
 
 	// If either of the debug or log globals aren't set, then we can stop
-	if ( !isset($wp_super_cache_debug)
-		 || !isset($wp_cache_debug_log) )
+	if ( ! isset( $wp_super_cache_debug, $wp_cache_debug_log ) )
 		return false;
 
 	// If either the debug or log globals are false or empty, we can stop
@@ -1802,34 +1801,34 @@ function wp_cache_ob_callback( $buffer ) {
 	} elseif ( wp_cache_user_agent_is_rejected() ) {
 		wp_cache_debug( "USER AGENT ({$_SERVER[ 'HTTP_USER_AGENT' ]}) rejected. Not Caching", 4 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'single' ] ) && $wp_cache_pages[ 'single' ] == 1 && isset( $wp_super_cache_query[ 'is_single' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['single'], $wp_super_cache_query['is_single'] ) && $wp_cache_pages['single'] == 1 ) {
 		wp_cache_debug( 'Not caching single post.', 2 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'pages' ] ) && $wp_cache_pages[ 'pages' ] == 1 && isset( $wp_super_cache_query[ 'is_page' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['pages'], $wp_super_cache_query['is_page'] ) && $wp_cache_pages['pages'] == 1 ) {
 		wp_cache_debug( 'Not caching single page.', 2 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'archives' ] ) && $wp_cache_pages[ 'archives' ] == 1 && isset( $wp_super_cache_query[ 'is_archive' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['archives'], $wp_super_cache_query['is_archive'] ) && $wp_cache_pages['archives'] == 1 ) {
 		wp_cache_debug( 'Not caching archive page.', 2 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'tag' ] ) && $wp_cache_pages[ 'tag' ] == 1 && isset( $wp_super_cache_query[ 'is_tag' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['tag'], $wp_super_cache_query['is_tag'] ) && $wp_cache_pages['tag'] == 1 ) {
 		wp_cache_debug( 'Not caching tag page.', 2 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'category' ] ) && $wp_cache_pages[ 'category' ] == 1 && isset( $wp_super_cache_query[ 'is_category' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['category'], $wp_super_cache_query['is_category'] ) && $wp_cache_pages['category'] == 1 ) {
 		wp_cache_debug( 'Not caching category page.', 2 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'frontpage' ] ) && $wp_cache_pages[ 'frontpage' ] == 1 && isset( $wp_super_cache_query[ 'is_front_page' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['frontpage'], $wp_super_cache_query['is_front_page'] ) && $wp_cache_pages['frontpage'] == 1 ) {
 		wp_cache_debug( 'Not caching front page.', 2 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'home' ] ) && $wp_cache_pages[ 'home' ] == 1 && isset( $wp_super_cache_query[ 'is_home' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['home'], $wp_super_cache_query['is_home'] ) && $wp_cache_pages['home'] == 1 ) {
 		wp_cache_debug( 'Not caching home page.', 2 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'search' ] ) && $wp_cache_pages[ 'search' ] == 1 && isset( $wp_super_cache_query[ 'is_search' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['search'], $wp_super_cache_query['is_search'] ) && $wp_cache_pages['search'] == 1 ) {
 		wp_cache_debug( 'Not caching search page.', 2 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'author' ] ) && $wp_cache_pages[ 'author' ] == 1 && isset( $wp_super_cache_query[ 'is_author' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['author'], $wp_super_cache_query['is_author'] ) && $wp_cache_pages['author'] == 1 ) {
 		wp_cache_debug( 'Not caching author page.', 2 );
 		$cache_this_page = false;
-	} elseif ( isset( $wp_cache_pages[ 'feed' ] ) && $wp_cache_pages[ 'feed' ] == 1 && isset( $wp_super_cache_query[ 'is_feed' ] ) ) {
+	} elseif ( isset( $wp_cache_pages['feed'], $wp_super_cache_query['is_feed'] ) && $wp_cache_pages['feed'] == 1 ) {
 		wp_cache_debug( 'Not caching feed.', 2 );
 		$cache_this_page = false;
 	} elseif ( isset( $wp_super_cache_query[ 'is_rest' ] ) ) {

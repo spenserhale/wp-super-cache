@@ -35,7 +35,7 @@ if ( ! isset( $wp_cache_plugins_dir ) ) {
 	$wp_cache_plugins_dir = WPCACHEHOME . 'plugins';
 }
 
-if ( isset( $_GET['donotcachepage'] ) && isset( $cache_page_secret ) && $_GET['donotcachepage'] == $cache_page_secret ) {
+if ( isset( $_GET['donotcachepage'], $cache_page_secret ) && $_GET['donotcachepage'] == $cache_page_secret ) {
 	$cache_enabled = false;
 	define( 'DONOTCACHEPAGE', 1 );
 }
