@@ -102,4 +102,4 @@ $wpsc_save_headers = 0;
 $cache_schedule_interval = 'daily';
 $wp_super_cache_comments = 1;
 $wpsc_version = 169;
-?>
+
