@@ -1882,7 +1882,7 @@ function wp_cache_edit_max_time() {
 
 function wp_cache_sanitize_value($text, & $array) {
 	$text = esc_html(strip_tags($text));
-	$array = preg_split("/[\s,]+/", chop($text));
+	$array = preg_split("/[\s,]+/", rtrim($text));
 	$text = var_export($array, true);
 	$text = preg_replace('/[\s]+/', ' ', $text);
 	return $text;
@@ -2523,7 +2523,7 @@ function wp_cache_verify_config_file() {
 	$dir = dirname($wp_cache_config_file);
 
 	if ( file_exists($wp_cache_config_file) ) {
-		$lines = join( ' ', file( $wp_cache_config_file ) );
+		$lines = implode( ' ', file( $wp_cache_config_file ) );
 		if( strpos( $lines, 'WPCACHEHOME' ) === false ) {
 			if( is_writeable_ACLSafe( $wp_cache_config_file ) ) {
 				@unlink( $wp_cache_config_file );
@@ -2613,7 +2613,7 @@ function wp_cache_create_advanced_cache() {
 	$file = file_get_contents( $wpsc_advanced_cache_dist_filename );
 	$fp = @fopen( $wpsc_advanced_cache_filename, 'w' );
 	if( $fp ) {
-		fputs( $fp, $file );
+		fwrite( $fp, $file );
 		fclose( $fp );
 	} else {
 		$ret = false;
@@ -3900,7 +3900,7 @@ function wpsc_get_post_types() {
 
 	$post_types = (array) apply_filters( 'wpsc_preload_post_types', get_post_types( $preload_type_args, 'names', 'or' ));
 
-	return "'" . join( "', '", array_map( 'esc_sql', $post_types ) ) . "'";
+	return "'" . implode( "', '", array_map( 'esc_sql', $post_types ) ) . "'";
 }
 function wpsc_post_count() {
 	global $wpdb;
