@@ -19,11 +19,9 @@ class WP_Super_Cache_Rest_Get_Status extends WP_REST_Controller {
 		$this->add_php_mod_rewrite_status( $status );
 		$this->add_preload_status( $status );
 
-		if ( empty( $status ) ) {
-			return rest_ensure_response( new stdclass() );
-		} else {
-			return rest_ensure_response( $status );
-		}
+		return ! empty( $status )
+			? rest_ensure_response( $status )
+			: rest_ensure_response( new stdclass() );
 	}
 
 	/**
