@@ -2805,7 +2805,7 @@ function wp_cache_files() {
 				$mtime = filemtime( $blog_cache_dir . 'meta/' . $file );
 				$fsize = @filesize( $blog_cache_dir . $file );
 				if ( $fsize > 0 )
-					$fsize = $fsize - 15; // die() command takes 15 bytes at the start of the file
+					$fsize -= 15; // die() command takes 15 bytes at the start of the file
 
 				$age = $now - $mtime;
 				if ( $valid_nonce && isset( $_GET[ 'listfiles' ] ) ) {
@@ -2837,7 +2837,7 @@ function wp_cache_files() {
 		closedir($handle);
 	}
 	if( $wp_cache_fsize != 0 ) {
-		$wp_cache_fsize = $wp_cache_fsize/1024;
+		$wp_cache_fsize /= 1024;
 	} else {
 		$wp_cache_fsize = 0;
 	}
@@ -3692,7 +3692,7 @@ function next_preload_message( $hook, $text, $limit = 0 ) {
 		if ( $next_time > 0 ) {
 			$m = (int)($next_time / 60);
 			$s = $next_time % 60;
-			$h = (int)($m / 60); $m = $m % 60;
+			$h = (int)($m / 60); $m %= 60;
 		}
 		if ( $next_time > 0 && $next_time < ( 60 * $wp_cache_preload_interval ) )
 			echo '<div class="notice notice-warning"><p>' . sprintf( $text, $h, $m, $s ) . '</p></div>';
