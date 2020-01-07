@@ -177,12 +177,15 @@ if ( '' !== DYNAMIC_OUTPUT_BUFFER_TAG ) {
 	}
 	add_cacheaction( 'add_cacheaction', 'dynamic_output_buffer_init' );
 
+	/**
+	 * Const DYNAMIC_OB_TEXT is set when you call dynamic_output_buffer_test() from the theme.
+	 *
+	 * @param $safety
+	 *
+	 * @return int When is 1, it is ready to replace tag with dynamic content. When is 0, tag cannot be replaced.
+	 */
 	function dynamic_output_buffer_test_safety( $safety ) {
-		if ( defined( 'DYNAMIC_OB_TEXT' ) ) {// this is set when you call dynamic_output_buffer_test() from the theme.
-			return 1; // ready to replace tag with dynamic content.
-		} else {
-			return 0; // tag cannot be replaced.
-		}
+		return defined( 'DYNAMIC_OB_TEXT' ) ? 1 : 0;
 	}
 	add_cacheaction( 'wpsc_cachedata_safety', 'dynamic_output_buffer_test_safety' );
 }
