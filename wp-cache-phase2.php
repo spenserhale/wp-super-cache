@@ -2843,7 +2843,7 @@ function wpsc_delete_cats_tags( $post ) {
 function wpsc_post_transition( $new_status, $old_status, $post ) {
 
 	$ptype = is_object( $post ) ? get_post_type_object( $post->post_type ) : null;
-	if ( empty( $ptype ) || ! $ptype->public ) {
+	if ( $ptype === null || ! $ptype->public ) {
 		return;
 	}
 
@@ -2944,7 +2944,7 @@ function wp_cache_post_change( $post_id ) {
 
 	$post  = get_post( $post_id );
 	$ptype = is_object( $post ) ? get_post_type_object( $post->post_type ) : null;
-	if ( empty( $ptype ) || ! $ptype->public ) {
+	if ( $ptype === null || ! $ptype->public ) {
 		return $post_id;
 	}
 
