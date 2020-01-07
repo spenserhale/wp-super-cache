@@ -744,11 +744,7 @@ function wpsc_is_in_cache_directory( $directory ) {
 		return false;
 	}
 
-	if ( substr( $directory, 0, strlen( $rp_cache_path ) ) == $rp_cache_path ) {
-		return true;
-	} else {
-		return false;
-	}
+	return substr( $directory, 0, strlen( $rp_cache_path ) ) == $rp_cache_path;
 }
 
 function wpsc_delete_files( $dir, $delete = true ) {
@@ -972,17 +968,11 @@ function wp_cache_confirm_delete( $dir ) {
 		return false;
 	}
 
-	if (
-		$dir == '' ||
-		$dir == $rp_cache_path ||
-		$dir == wpsc_get_realpath( $blog_cache_dir ) ||
-		$dir == wpsc_get_realpath( $blog_cache_dir . "meta/" ) ||
-		$dir == wpsc_get_realpath( $cache_path . "supercache" )
-	) {
-		return false;
-	} else {
-		return true;
-	}
+	return ! ( $dir == '' ||
+	           $dir == $rp_cache_path ||
+	           $dir == wpsc_get_realpath( $blog_cache_dir ) ||
+	           $dir == wpsc_get_realpath( $blog_cache_dir . "meta/" ) ||
+	           $dir == wpsc_get_realpath( $cache_path . "supercache" ) );
 }
 
 // copy of _deep_replace() to be used before WordPress loads
