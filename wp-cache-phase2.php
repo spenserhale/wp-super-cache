@@ -445,7 +445,7 @@ function wp_cache_mobile_group( $user_agent ) {
 	global $wp_cache_mobile_groups;
 	foreach( (array)$wp_cache_mobile_groups as $name => $group ) {
 		foreach( (array)$group as $browser ) {
-			$browser = trim( strtolower( $browser ) );
+			$browser = strtolower( trim( $browser ) );
 			if ( $browser != '' && strstr( $user_agent, $browser ) ) {
 				return $browser;
 			}
@@ -486,7 +486,7 @@ function wp_cache_check_mobile( $cache_key ) {
 	$browsers = explode( ',', $wp_cache_mobile_browsers );
 	$user_agent = strtolower( $_SERVER['HTTP_USER_AGENT'] );
 	foreach ($browsers as $browser) {
-		if ( strstr( $user_agent, trim( strtolower( $browser ) ) ) ) {
+		if ( strstr( $user_agent, strtolower( trim( $browser ) ) ) ) {
 			wp_cache_debug( 'mobile browser detected: ' . $browser );
 			return $cache_key . '-' . wp_cache_mobile_group( $user_agent );
 		}
