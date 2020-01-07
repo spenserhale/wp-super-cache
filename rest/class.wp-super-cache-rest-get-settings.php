@@ -82,11 +82,7 @@ class WP_Super_Cache_Rest_Get_Settings extends WP_REST_Controller {
 		}
 		include( $wp_cache_config_file );
 
-		if ( $wp_cache_mod_rewrite == 1 ) {
-			return 'mod_rewrite';
-		} else {
-			return 'PHP';
-		}
+		return $wp_cache_mod_rewrite == 1 ? 'mod_rewrite' : 'PHP';
 	}
 
 	/**
