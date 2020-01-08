@@ -279,7 +279,7 @@ function wp_cache_manager_error_checks() {
 			</div>
 			<?php
 		} elseif ( function_exists( "wp_remote_get" ) == false ) {
-			$hostname = str_replace( 'http://', '', str_replace( 'https://', '', get_option( 'siteurl' ) ) );
+			$hostname = str_replace(array('https://', 'http://'), '', get_option( 'siteurl' ));
 			if( strpos( $hostname, '/' ) )
 				$hostname = substr( $hostname, 0, strpos( $hostname, '/' ) );
 			$ip = gethostbyname( $hostname );
@@ -2530,7 +2530,7 @@ function wp_cache_verify_config_file() {
 			return false;
 		}
 		copy($wp_cache_config_file_sample, $wp_cache_config_file);
-		$dir = str_replace( str_replace( '\\', '/', WP_CONTENT_DIR ), '', str_replace( '\\', '/', __DIR__ ) );
+		$dir = str_replace(array('\\', str_replace( '\\', '/', WP_CONTENT_DIR )), array('/', ''), __DIR__);
 		if( is_file( __DIR__ . '/wp-cache-config-sample.php' ) ) {
 			wp_cache_replace_line('define\(\ \'WPCACHEHOME', "\tdefine( 'WPCACHEHOME', WP_CONTENT_DIR . \"{$dir}/\" );", $wp_cache_config_file);
 		} elseif( is_file( __DIR__ . '/wp-super-cache/wp-cache-config-sample.php' ) ) {
@@ -3360,8 +3360,7 @@ function wpsc_get_htaccess_info() {
 	$home_root_lc = str_replace( '//', '/', strtolower( $home_root ) );
 	$inst_root = str_replace( '//', '/', '/' . trailingslashit( str_replace( $content_dir_root, '', str_replace( '\\', '/', WP_CONTENT_DIR ) ) ) );
 	$wprules = implode( "\n", extract_from_markers( $home_path.'.htaccess', 'WordPress' ) );
-	$wprules = str_replace( "RewriteEngine On\n", '', $wprules );
-	$wprules = str_replace( "RewriteBase $home_root\n", '', $wprules );
+	$wprules = str_replace(array("RewriteEngine On\n", "RewriteBase $home_root\n"), '', $wprules);
 	$scrules = implode( "\n", extract_from_markers( $home_path.'.htaccess', 'WPSuperCache' ) );
 
 	if( substr( get_option( 'permalink_structure' ), -1 ) == '/' ) {

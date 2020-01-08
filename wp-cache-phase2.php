@@ -666,7 +666,7 @@ function get_current_url_supercache_dir( $post_id = 0 ) {
 	if( is_array( $cached_direct_pages ) && in_array( $_SERVER[ 'REQUEST_URI' ], $cached_direct_pages ) ) {
 		$dir = ABSPATH . $uri . '/';
 	}
-	$dir = str_replace( '..', '', str_replace( '//', '/', $dir ) );
+	$dir = str_replace( array( '//', '..' ), array( '/', '' ), $dir );
 	wp_cache_debug( "supercache dir: $dir", 5 );
 	if ( $DONOTREMEMBER == 0 )
 		$saved_supercache_dir[ $post_id ] = $dir;

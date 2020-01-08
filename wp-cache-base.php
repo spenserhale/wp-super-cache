@@ -23,8 +23,11 @@ if ( is_multisite() ) {
 	} elseif ( ( defined( 'SUBDOMAIN_INSTALL' ) && SUBDOMAIN_INSTALL ) || ( defined( 'VHOST' ) && VHOST === 'yes' ) ) {
 		$blogcacheid = $WPSC_HTTP_HOST;
 	} else {
-		$request_uri = str_replace( '..', '', preg_replace( '/[ <>\'\"\r\n\t\(\)]/', '', $_SERVER['REQUEST_URI'] ) );
-		$request_uri = str_replace( '//', '/', $request_uri );
+		$request_uri = str_replace(
+			array( '..', '//' ),
+			array( '', '/' ),
+			preg_replace( '/[ <>\'\"\r\n\t\(\)]/', '', $_SERVER['REQUEST_URI'] )
+		);
 
 		$wpsc_path_segs  = array_filter( explode( '/', trim( $request_uri, '/' ) ) );
 		$wpsc_base_count = defined( 'PATH_CURRENT_SITE' ) ? count( array_filter( explode( '/', trim( PATH_CURRENT_SITE, '/' ) ) ) ) : 0;
