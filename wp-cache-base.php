@@ -26,7 +26,7 @@ if ( is_multisite() ) {
 		$request_uri = str_replace(
 			array( '..', '//' ),
 			array( '', '/' ),
-			preg_replace( '/[ <>\'\"\r\n\t\(\)]/', '', $_SERVER['REQUEST_URI'] )
+			preg_replace( '/[ <>\'\"\r\n\t()]/', '', $_SERVER['REQUEST_URI'] )
 		);
 
 		$wpsc_path_segs  = array_filter( explode( '/', trim( $request_uri, '/' ) ) );

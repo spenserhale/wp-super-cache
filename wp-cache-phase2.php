@@ -650,7 +650,7 @@ function get_current_url_supercache_dir( $post_id = 0 ) {
 	} else {
 		$uri = strtolower( $wp_cache_request_uri );
 	}
-	$uri = wpsc_deep_replace( array( '..', '\\', 'index.php', ), preg_replace( '/[ <>\'\"\r\n\t\(\)]/', '', preg_replace( "/(\?.*)?(#.*)?$/", '', $uri ) ) );
+	$uri = wpsc_deep_replace( array( '..', '\\', 'index.php', ), preg_replace( '/[ <>\'\"\r\n\t()]/', '', preg_replace( "/(\?.*)?(#.*)?$/", '', $uri ) ) );
 	$hostname = $WPSC_HTTP_HOST;
 	// Get hostname from wp options for wp-cron, wp-cli and similar requests.
 	if ( empty( $hostname ) && function_exists( 'get_option' ) ) {
@@ -1234,7 +1234,7 @@ function wp_cache_replace_line( $old, $new, $my_file ) {
 	} else {
 		$done = false;
 		foreach( (array) $lines as $line ) {
-			if ( $done || ! preg_match( '/^(if\ \(\ \!\ )?define|\$|\?>/', $line ) ) {
+			if ( $done || ! preg_match( '/^(if \( ! )?define|\$|\?>/', $line ) ) {
 				fwrite($fd, $line);
 			} else {
 				fwrite($fd, "$new\n");
@@ -2252,7 +2252,7 @@ function wp_cache_get_ob(&$buffer) {
 		$last_urls = (array)get_option( 'supercache_last_cached' );
 		if ( count( $last_urls ) >= 10 )
 			$last_urls = array_slice( $last_urls, 1, 9 );
-		$last_urls[] = array( 'url' => preg_replace( '/[ <>\'\"\r\n\t\(\)]/', '', $_SERVER[ 'REQUEST_URI' ] ), 'date' => date( 'Y-m-d H:i:s' ) );
+		$last_urls[] = array( 'url' => preg_replace( '/[ <>\'\"\r\n\t()]/', '', $_SERVER[ 'REQUEST_URI' ] ), 'date' => date( 'Y-m-d H:i:s' ) );
 		update_option( 'supercache_last_cached', $last_urls );
 	}
 	wp_cache_writers_exit();
@@ -2531,7 +2531,7 @@ function wp_cache_shutdown_callback() {
 		return false;
 	}
 
-	$wp_cache_meta[ 'uri' ] = $WPSC_HTTP_HOST . preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', $wp_cache_request_uri); // To avoid XSS attacks
+	$wp_cache_meta[ 'uri' ] = $WPSC_HTTP_HOST . preg_replace('/[ <>\'\"\r\n\t()]/', '', $wp_cache_request_uri); // To avoid XSS attacks
 	$wp_cache_meta[ 'blog_id' ] = $blog_id;
 	$wp_cache_meta[ 'post' ] = wp_cache_post_id();
 	$wp_cache_meta[ 'key' ] = $wp_cache_key;

@@ -1543,7 +1543,7 @@ function wpsc_update_direct_pages() {
 		$expiredfiles = array_diff( $cached_direct_pages, $_POST[ 'direct_pages' ] );
 		unset( $cached_direct_pages );
 		foreach( $_POST[ 'direct_pages' ] as $page ) {
-			$page = str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', $page ) );
+			$page = str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t()]/', '', $page ) );
 			if ( $page != '' ) {
 				$cached_direct_pages[] = $page;
 				$out .= "'$page', ";
@@ -1554,7 +1554,7 @@ function wpsc_update_direct_pages() {
 	}
 	if ( $valid_nonce && array_key_exists('new_direct_page', $_POST) && $_POST[ 'new_direct_page' ] && '' != $_POST[ 'new_direct_page' ] ) {
 		$page = str_replace( get_option( 'siteurl' ), '', $_POST[ 'new_direct_page' ] );
-		$page = str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', $page ) );
+		$page = str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t()]/', '', $page ) );
 		if ( strpos($page, '/') !== 0 )
 			$page = '/' . $page;
 		if ( $page != '/' || false == is_array( $cached_direct_pages ) || in_array( $page, $cached_direct_pages ) == false ) {
@@ -1581,7 +1581,7 @@ function wpsc_update_direct_pages() {
 				$firstfolder = explode( '/', $file );
 				$firstfolder = ABSPATH . $firstfolder[1];
 				$file = ABSPATH . $file;
-				$file = realpath( str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', $file ) ) );
+				$file = realpath( str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t()]/', '', $file ) ) );
 				if ( $file ) {
 					@unlink( trailingslashit( $file ) . "index.html" );
 					@unlink( trailingslashit( $file ) . "index.html.gz" );
@@ -1592,7 +1592,7 @@ function wpsc_update_direct_pages() {
 	}
 
 	if ( $valid_nonce && array_key_exists('deletepage', $_POST) && $_POST[ 'deletepage' ] ) {
-		$page = str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', $_POST['deletepage'] ) ) . '/';
+		$page = str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t()]/', '', $_POST['deletepage'] ) ) . '/';
 		$pagefile = realpath( ABSPATH . $page . 'index.html' );
 		if ( strpos($pagefile, ABSPATH) !== 0 || false == wp_cache_confirm_delete( ABSPATH . $page ) ) {
 			die( __( 'Cannot delete directory', 'wp-super-cache' ) );
@@ -2764,13 +2764,13 @@ function wp_cache_files() {
 	$wp_cache_fsize = 0;
 	if ( ( $handle = @opendir( $blog_cache_dir ) ) ) {
 		if ( $valid_nonce && isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'deletewpcache' ) {
-			$deleteuri = wpsc_deep_replace( array( '..', '\\', 'index.php' ), preg_replace( '/[ <>\'\"\r\n\t\(\)]/', '', base64_decode( $_GET[ 'uri' ] ) ) );
+			$deleteuri = wpsc_deep_replace( array( '..', '\\', 'index.php' ), preg_replace( '/[ <>\'\"\r\n\t()]/', '', base64_decode( $_GET[ 'uri' ] ) ) );
 		} else {
 			$deleteuri = '';
 		}
 
 		if ( $valid_nonce && isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] == 'deletesupercache' ) {
-			$supercacheuri = wpsc_deep_replace( array( '..', '\\', 'index.php' ), preg_replace( '/[ <>\'\"\r\n\t\(\)]/', '', preg_replace("/(\?.*)?$/", '', base64_decode( $_GET[ 'uri' ] ) ) ) );
+			$supercacheuri = wpsc_deep_replace( array( '..', '\\', 'index.php' ), preg_replace( '/[ <>\'\"\r\n\t()]/', '', preg_replace("/(\?.*)?$/", '', base64_decode( $_GET[ 'uri' ] ) ) ) );
 			$supercacheuri = trailingslashit( realpath( $cache_path . 'supercache/' . $supercacheuri ) );
 			if ( wp_cache_confirm_delete( $supercacheuri ) ) {
 				printf( __( "Deleting supercache file: <strong>%s</strong><br />", 'wp-super-cache' ), $supercacheuri );
@@ -3812,7 +3812,7 @@ function wpsc_admin_bar_render( $wp_admin_bar ) {
 
 	if ( ( is_singular() || is_archive() || is_front_page() || is_search() ) && current_user_can(  'delete_others_posts' ) ) {
 		$site_regex = preg_quote( rtrim( (string) parse_url( get_option( 'home' ), PHP_URL_PATH ), '/' ), '`' );
-		$req_uri    = preg_replace( '/[ <>\'\"\r\n\t\(\)]/', '', $_SERVER[ 'REQUEST_URI' ] );
+		$req_uri    = preg_replace( '/[ <>\'\"\r\n\t()]/', '', $_SERVER[ 'REQUEST_URI' ] );
 		$path       = preg_replace( '`^' . $site_regex . '`', '', $req_uri );
 
 		$wp_admin_bar->add_menu( array(
