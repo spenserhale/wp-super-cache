@@ -834,6 +834,7 @@ function get_all_supercache_filenames( $dir = '' ) {
 		$filenames = do_cacheaction( 'all_supercache_filenames', $filenames );
 	}
 
+	$out = [];
 	foreach( $filenames as $file ) {
 		$out[] = $file;
 		$out[] = $file . '.gz';
