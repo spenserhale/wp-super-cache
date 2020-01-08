@@ -781,7 +781,7 @@ function wpsc_delete_files( $dir, $delete = true ) {
 	if ( is_dir( $dir ) && $dh = @opendir( $dir ) ) {
 		while ( ( $file = readdir( $dh ) ) !== false ) {
 			wp_cache_debug( 'wpsc_delete_files: reading files: ' . $file );
-			if ( $file != '.' && $file != '..' && $file != '.htaccess' && is_file( $dir . $file ) )
+			if ( ! in_array($file, ['.','..','.htaccess']) && is_file( $dir . $file ) ) {
 				if ( $delete ) {
 					wp_cache_debug( 'wpsc_delete_files: deleting ' . $dir . $file );
 					@unlink( $dir . $file );
@@ -789,6 +789,7 @@ function wpsc_delete_files( $dir, $delete = true ) {
 					wp_cache_debug( 'wpsc_delete_files: rebuild or delete ' . $dir . $file );
 					@wp_cache_rebuild_or_delete( $dir . $file );
 				}
+			}
 		}
 		closedir( $dh );
 
