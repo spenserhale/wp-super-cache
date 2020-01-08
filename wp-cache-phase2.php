@@ -495,7 +495,7 @@ function wp_cache_check_mobile( $cache_key ) {
 	if ( isset( $wp_cache_mobile_prefixes ) ) {
 		$browsers = explode( ',', $wp_cache_mobile_prefixes );
 		foreach ($browsers as $browser_prefix) {
-			if ( substr($user_agent, 0, 4) == $browser_prefix ) {
+			if ( strpos( $user_agent, $browser_prefix ) === 0 ) {
 				wp_cache_debug( 'mobile browser (prefix) detected: ' . $browser_prefix );
 				return $cache_key . '-' . $browser_prefix;
 			}
@@ -738,7 +738,7 @@ function wpsc_is_in_cache_directory( $directory ) {
 		return false;
 	}
 
-	return substr( $directory, 0, strlen( $rp_cache_path ) ) == $rp_cache_path;
+	return strpos( $directory, $rp_cache_path ) === 0;
 }
 
 function wpsc_delete_files( $dir, $delete = true ) {
@@ -821,7 +821,7 @@ function get_all_supercache_filenames( $dir = '' ) {
 		// open directory and look for index-*.html files
 		if ( is_dir( $dir ) && $dh = @opendir( $dir ) ) {
 			while ( ( $file = readdir( $dh ) ) !== false ) {
-				if ( substr( $file, 0, 6 ) == 'index-' && strpos( $file, '.html' ) )
+				if ( strpos( $file, 'index-' ) === 0 && strpos( $file, '.html' ) )
 					$filenames[] = $file;
 			}
 			closedir( $dh );
@@ -2433,13 +2433,13 @@ function wp_cache_rebuild_or_delete( $file ) {
 		return false;
 	}
 
-	if ( substr( basename( $file ), 0, mb_strlen( $file_prefix ) ) == $file_prefix ) {
+	if ( strpos( basename( $file ), $file_prefix ) === 0 ) {
 		@unlink( $file );
 		wp_cache_debug( "rebuild_or_gc: deleted non-anonymous file: $file" );
 		return false;
 	}
 
-	if ( substr( basename( $file ), 0, 5 + mb_strlen( $file_prefix ) ) == 'meta-' . $file_prefix ) {
+	if ( strpos( basename( $file ), 'meta-' . $file_prefix ) === 0 ) {
 		@unlink( $file );
 		wp_cache_debug( "rebuild_or_gc: deleted meta file: $file" );
 		return false;

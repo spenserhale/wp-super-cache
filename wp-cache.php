@@ -283,7 +283,7 @@ function wp_cache_manager_error_checks() {
 			if( strpos( $hostname, '/' ) )
 				$hostname = substr( $hostname, 0, strpos( $hostname, '/' ) );
 			$ip = gethostbyname( $hostname );
-			if( substr( $ip, 0, 3 ) == '127' || substr( $ip, 0, 7 ) == '192.168' ) {
+			if( strpos($ip, '127') === 0 || strpos($ip, '192.168') === 0 ) {
 				?><div class="notice notice-warning"><h4><?php printf( __( 'Warning! Your hostname "%s" resolves to %s', 'wp-super-cache' ), $hostname, $ip ); ?></h4>
 					<p><?php printf( __( 'Your server thinks your hostname resolves to %s. Some services such as garbage collection by this plugin, and WordPress scheduled posts may not operate correctly.', 'wp-super-cache' ), $ip ); ?></p>
 					<p><?php printf( __( 'Please see entry 16 in the <a href="%s">Troubleshooting section</a> of the readme.txt', 'wp-super-cache' ), 'https://wordpress.org/plugins/wp-super-cache/faq/' ); ?></p>
@@ -1139,7 +1139,7 @@ table.wpsc-settings-table {
 						<li><?php _e( 'If the directory does not exist, it will be created. Please make sure your web server user has write access to the parent directory. The parent directory must exist.', 'wp-super-cache' ); ?></li>
 						<li><?php _e( 'If the new cache directory does not exist, it will be created and the contents of the old cache directory will be moved there. Otherwise, the old cache directory will be left where it is.', 'wp-super-cache' ); ?></li>
 						<li><?php _e( 'Submit a blank entry to set it to the default directory, WP_CONTENT_DIR . /cache/.', 'wp-super-cache' ); ?></li>
-						<?php if ( get_site_option( 'wp_super_cache_index_detected' ) && strlen( $cache_path ) > strlen( ABSPATH ) && ABSPATH == substr( $cache_path, 0, strlen( ABSPATH ) ) ) {
+						<?php if ( get_site_option( 'wp_super_cache_index_detected' ) && strlen( $cache_path ) > strlen( ABSPATH ) && strpos($cache_path, ABSPATH) === 0 ) {
 							$msg = __( 'The plugin detected a bare directory index in your cache directory, which would let visitors see your cache files directly and might expose private posts.', 'wp-super-cache' );
 							if ( ! $is_nginx && $super_cache_enabled && $wp_cache_mod_rewrite == 1 ) {
 								$msg .= ' ' . __( 'You are using expert mode to serve cache files so the plugin has added <q>Options -Indexes</q> to the .htaccess file in the cache directory to disable indexes. However, if that does not work, you should contact your system administrator or support and ask for them to be disabled, or use simple mode and move the cache outside of the web root.', 'wp-super-cache' );
@@ -1555,7 +1555,7 @@ function wpsc_update_direct_pages() {
 	if ( $valid_nonce && array_key_exists('new_direct_page', $_POST) && $_POST[ 'new_direct_page' ] && '' != $_POST[ 'new_direct_page' ] ) {
 		$page = str_replace( get_option( 'siteurl' ), '', $_POST[ 'new_direct_page' ] );
 		$page = str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', $page ) );
-		if ( substr( $page, 0, 1 ) != '/' )
+		if ( strpos($page, '/') !== 0 )
 			$page = '/' . $page;
 		if ( $page != '/' || false == is_array( $cached_direct_pages ) || in_array( $page, $cached_direct_pages ) == false ) {
 			$cached_direct_pages[] = $page;
@@ -1594,7 +1594,7 @@ function wpsc_update_direct_pages() {
 	if ( $valid_nonce && array_key_exists('deletepage', $_POST) && $_POST[ 'deletepage' ] ) {
 		$page = str_replace( '..', '', preg_replace('/[ <>\'\"\r\n\t\(\)]/', '', $_POST['deletepage'] ) ) . '/';
 		$pagefile = realpath( ABSPATH . $page . 'index.html' );
-		if ( substr( $pagefile, 0, strlen( ABSPATH ) ) != ABSPATH || false == wp_cache_confirm_delete( ABSPATH . $page ) ) {
+		if ( strpos($pagefile, ABSPATH) !== 0 || false == wp_cache_confirm_delete( ABSPATH . $page ) ) {
 			die( __( 'Cannot delete directory', 'wp-super-cache' ) );
 		}
 		$firstfolder = explode( '/', $page );
@@ -2317,7 +2317,7 @@ function wp_cache_index_notice() {
 		return false;
 
 	if ( strlen( $cache_path ) < strlen( ABSPATH )
-		|| ABSPATH != substr( $cache_path, 0, strlen( ABSPATH ) ) )
+		|| strpos($cache_path, ABSPATH) !== 0 )
 		return false; // cache stored outside web root
 
 	if ( get_site_option( 'wp_super_cache_index_detected' ) == 2 ) {
@@ -3304,7 +3304,7 @@ function wpsc_update_htaccess_form( $short_form = true ) {
  */
 function wpsc_get_logged_in_cookie() {
 	$logged_in_cookie = 'wordpress_logged_in';
-	if ( defined( 'LOGGED_IN_COOKIE' ) && substr( constant( 'LOGGED_IN_COOKIE' ), 0, 19 ) != 'wordpress_logged_in' )
+	if ( defined( 'LOGGED_IN_COOKIE' ) && strpos(constant( 'LOGGED_IN_COOKIE' ), 'wordpress_logged_in') !== 0 )
 		$logged_in_cookie = constant( 'LOGGED_IN_COOKIE' );
 	return $logged_in_cookie;
 }
@@ -4170,7 +4170,7 @@ function wpsc_update_plugin_list( $update ) {
 
 function wpsc_add_plugin( $file ) {
 	global $wpsc_plugins;
-	if ( substr( $file, 0, strlen( ABSPATH ) ) == ABSPATH ) {
+	if ( strpos($file, ABSPATH) === 0 ) {
 		$file = substr( $file, strlen( ABSPATH ) ); // remove ABSPATH
 	}
 	if (
@@ -4187,7 +4187,7 @@ add_action( 'wpsc_add_plugin', 'wpsc_add_plugin' );
 
 function wpsc_delete_plugin( $file ) {
 	global $wpsc_plugins;
-	if ( substr( $file, 0, strlen( ABSPATH ) ) == ABSPATH ) {
+	if ( strpos($file, ABSPATH) === 0 ) {
 		$file = substr( $file, strlen( ABSPATH ) ); // remove ABSPATH
 	}
 	if (
