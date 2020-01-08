@@ -441,7 +441,7 @@ function wp_cache_mobile_group( $user_agent ) {
 	foreach( (array)$wp_cache_mobile_groups as $name => $group ) {
 		foreach( (array)$group as $browser ) {
 			$browser = strtolower( trim( $browser ) );
-			if ( $browser != '' && strstr( $user_agent, $browser ) ) {
+			if ( $browser != '' && strpos( $user_agent, $browser ) !== false ) {
 				return $browser;
 			}
 		}
@@ -481,7 +481,7 @@ function wp_cache_check_mobile( $cache_key ) {
 	$browsers = explode( ',', $wp_cache_mobile_browsers );
 	$user_agent = strtolower( $_SERVER['HTTP_USER_AGENT'] );
 	foreach ($browsers as $browser) {
-		if ( strstr( $user_agent, strtolower( trim( $browser ) ) ) ) {
+		if ( strpos( $user_agent, strtolower( trim( $browser ) ) ) !== false ) {
 			wp_cache_debug( 'mobile browser detected: ' . $browser );
 			return $cache_key . '-' . wp_cache_mobile_group( $user_agent );
 		}
@@ -1488,7 +1488,7 @@ function wp_cache_user_agent_is_rejected() {
 	}
 
 	foreach ( $cache_rejected_user_agent as $user_agent ) {
-		if ( ! empty( $user_agent ) && stristr( $headers['User-Agent'], $user_agent ) ) {
+		if ( ! empty( $user_agent ) && stripos( $headers['User-Agent'], $user_agent ) !== false ) {
 			return true;
 		}
 	}
@@ -1585,7 +1585,7 @@ function wp_cache_is_rejected($uri) {
 	global $cache_rejected_uri;
 
 	foreach( array( '/wp-admin/', 'xmlrpc.php', 'wp-app.php' ) as $u ) {
-		if( strstr( $uri, $u ) )
+		if( strpos( $uri, $u ) !== false )
 			return true; // we don't allow caching of wp-admin for security reasons
 	}
 	if ( false == is_array( $cache_rejected_uri ) )
