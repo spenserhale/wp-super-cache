@@ -70,7 +70,7 @@ function wp_supercache_badbehaviour_admin() {
 		<label><input type="radio" name="cache_badbehaviour" value="0" <?php if ( ! $cache_badbehaviour ) { echo 'checked="checked" '; } ?>/> <?php _e( 'Disabled', 'wp-super-cache' ); ?></label>
 		<p><?php _e( '', 'wp-super-cache' ); ?></p><?php
 		echo '<p>' . sprintf( __( '(Only WPCache caching supported, disabled compression and requires <a href="http://www.bad-behavior.ioerror.us/">Bad Behavior</a> in "%s/plugins/bad-behavior/") ', 'wp-super-cache' ), WP_CONTENT_DIR ) . '</p>';
-		if ( isset( $changed ) && $changed ) {
+		if ( ! empty( $changed ) ) {
 			if ( $cache_badbehaviour ) {
 				$status = __( 'enabled', 'wp-super-cache' );
 			} else {

@@ -1351,7 +1351,7 @@ table.wpsc-settings-table {
 	<p><?php printf( __( 'Please <a href="%s">rate us</a> and give feedback.', 'wp-super-cache' ), 'https://wordpress.org/support/plugin/wp-super-cache/reviews?rate=5#new-post' ); ?></p>
 
 	<?php
-	if ( isset( $wp_supercache_cache_list ) && $wp_supercache_cache_list ) {
+	if ( ! empty( $wp_supercache_cache_list ) ) {
 		$start_date = get_option( 'wpsupercache_start' );
 		if ( ! $start_date ) {
 			$start_date = time();
@@ -3508,7 +3508,7 @@ function wp_cron_preload_cache() {
 	if ( $wp_cache_preload_posts == 'all' || $c < $wp_cache_preload_posts ) {
 		wp_cache_debug( 'wp_cron_preload_cache: doing taxonomy preload.', 5 );
 		$permalink_counter_msg = $cache_path . "preload_permalink.txt";
-		if ( isset( $wp_cache_preload_taxonomies ) && $wp_cache_preload_taxonomies ) {
+		if ( ! empty( $wp_cache_preload_taxonomies ) ) {
 			$taxonomies = apply_filters( 'wp_cache_preload_taxonomies', array( 'post_tag' => 'tag', 'category' => 'category' ) );
 			foreach( $taxonomies as $taxonomy => $path ) {
 				$taxonomy_filename = $cache_path . "taxonomy_" . $taxonomy . ".txt";

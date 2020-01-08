@@ -23,7 +23,7 @@ function wp_super_cache_wptouch_admin() {
 		<label><input type="radio" name="cache_wptouch" value="0" <?php if ( ! $cache_wptouch ) { echo 'checked="checked" '; } ?>/> <?php _e( 'Disabled', 'wp-super-cache' ); ?></label>
 	<?php
 	echo '<p>' . __( 'Provides support for <a href="https://wordpress.org/plugins/wptouch/">WPTouch</a> mobile theme and plugin.', 'wp-super-cache' ) . '</p>';
-	if ( isset( $changed ) && $changed ) {
+	if ( ! empty( $changed ) ) {
 		if ( $cache_wptouch ) {
 			$status = __( 'enabled', 'wp-super-cache' );
 		} else {

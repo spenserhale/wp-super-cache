@@ -82,7 +82,7 @@ if ( wpsc_is_caching_user_disabled() ) {
 	return true;
 }
 
-if ( isset( $wp_cache_make_known_anon ) && $wp_cache_make_known_anon ) {
+if ( ! empty( $wp_cache_make_known_anon ) ) {
 	wp_supercache_cache_for_admins();
 }
 

@@ -105,7 +105,7 @@ function wp_cache_serve_cache_file() {
 		} elseif ( wp_cache_get_cookies_values() != '' ) {
 			wp_cache_debug( 'Cookies found. Cannot serve a supercache file. ' . wp_cache_get_cookies_values() );
 			return false;
-		} elseif ( isset( $wpsc_save_headers ) && $wpsc_save_headers ) {
+		} elseif ( ! empty( $wpsc_save_headers ) ) {
 			wp_cache_debug( 'Saving headers. Cannot serve a supercache file.' );
 			return false;
 		} elseif ( $cache_max_time > 0 && ( filemtime( $file ) + $cache_max_time ) < time() ) {
@@ -166,17 +166,17 @@ function wp_cache_serve_cache_file() {
 			}
 			$size = function_exists( 'mb_strlen' ) ? mb_strlen( $cachefiledata, '8bit' ) : strlen( $cachefiledata );
 			if ( $wp_cache_gzip_encoding ) {
-				if ( isset( $wpsc_served_header ) && $wpsc_served_header ) {
+				if ( ! empty( $wpsc_served_header ) ) {
 					header( "X-WP-Super-Cache: Served supercache gzip file from PHP" );
 				}
 				header( 'Content-Encoding: ' . $wp_cache_gzip_encoding );
 				header( 'Content-Length: ' . $size );
 			} elseif ( $wp_supercache_304 ) {
-				if ( isset( $wpsc_served_header ) && $wpsc_served_header ) {
+				if ( ! empty( $wpsc_served_header ) ) {
 					header( "X-WP-Super-Cache: Served supercache 304 file from PHP" );
 				}
 				header( 'Content-Length: ' . $size );
-			} elseif ( isset( $wpsc_served_header ) && $wpsc_served_header ) {
+			} elseif ( ! empty( $wpsc_served_header ) ) {
 				header( "X-WP-Super-Cache: Served supercache file from PHP" );
 			}
 
@@ -218,7 +218,7 @@ function wp_cache_serve_cache_file() {
 			header( $header );
 		}
 	}
-	if ( isset( $wpsc_served_header ) && $wpsc_served_header ) {
+	if ( ! empty( $wpsc_served_header ) ) {
 		header( 'X-WP-Super-Cache: Served WPCache cache file' );
 	}
 	if ( isset( $meta[ 'dynamic' ] ) ) {
@@ -398,9 +398,8 @@ function wp_cache_get_cookies_values() {
 	$string = do_cacheaction( 'wp_cache_get_cookies_values', $string );
 
 	if (
-		isset( $wpsc_cookies ) &&
-		is_array( $wpsc_cookies ) &&
-		! empty( $wpsc_cookies )
+		! empty( $wpsc_cookies ) &&
+		is_array( $wpsc_cookies )
 	) {
 		foreach( $wpsc_cookies as $name ) {
 			if ( isset( $_COOKIE[ $name ] ) ) {
@@ -818,7 +817,7 @@ function get_all_supercache_filenames( $dir = '' ) {
 
 	$filenames = array( 'index.html', 'index-https.html', 'index.html.php' );
 
-	if ( $dir != '' && isset( $wp_cache_mobile_enabled ) && $wp_cache_mobile_enabled ) {
+	if ( $dir != '' && ! empty( $wp_cache_mobile_enabled ) ) {
 		// open directory and look for index-*.html files
 		if ( is_dir( $dir ) && $dh = @opendir( $dir ) ) {
 			while ( ( $file = readdir( $dh ) ) !== false ) {
@@ -1601,7 +1600,7 @@ function wp_cache_is_rejected($uri) {
 function wp_cache_mutex_init() {
 	global $mutex, $wp_cache_mutex_disabled, $use_flock, $blog_cache_dir, $mutex_filename, $sem_id;
 
-	if ( defined( 'WPSC_DISABLE_LOCKING' ) || ( isset( $wp_cache_mutex_disabled ) && $wp_cache_mutex_disabled ) )
+	if ( defined( 'WPSC_DISABLE_LOCKING' ) || ! empty( $wp_cache_mutex_disabled ) )
 		return true;
 
 	if( !is_bool( $use_flock ) ) {
@@ -1625,7 +1624,7 @@ function wp_cache_mutex_init() {
 function wp_cache_writers_entry() {
 	global $mutex, $wp_cache_mutex_disabled, $use_flock;
 
-	if ( defined( 'WPSC_DISABLE_LOCKING' ) || ( isset( $wp_cache_mutex_disabled ) && $wp_cache_mutex_disabled ) )
+	if ( defined( 'WPSC_DISABLE_LOCKING' ) || ! empty( $wp_cache_mutex_disabled ) )
 		return true;
 
 	if( !$mutex ) {
@@ -1647,7 +1646,7 @@ function wp_cache_writers_entry() {
 function wp_cache_writers_exit() {
 	global $mutex, $wp_cache_mutex_disabled, $use_flock;
 
-	if ( defined( 'WPSC_DISABLE_LOCKING' ) || ( isset( $wp_cache_mutex_disabled ) && $wp_cache_mutex_disabled ) )
+	if ( defined( 'WPSC_DISABLE_LOCKING' ) || ! empty( $wp_cache_mutex_disabled ) )
 		return true;
 
 	if( !$mutex ) {
@@ -1848,7 +1847,7 @@ function wp_cache_ob_callback( $buffer ) {
 		$cache_this_page = false;
 	}
 
-	if ( isset( $wpsc_save_headers ) && $wpsc_save_headers )
+	if ( ! empty( $wpsc_save_headers ) )
 		$super_cache_enabled = false; // use standard caching to record headers
 
 	if ( $cache_this_page ) {
@@ -1959,7 +1958,7 @@ function wp_cache_get_ob(&$buffer) {
 	 * we avoid caching incomplete files */
 	if ( $buffer == '' ) {
 		$new_cache = false;
-		if ( isset( $GLOBALS[ 'wp_super_cache_debug' ] ) && $GLOBALS[ 'wp_super_cache_debug' ] ) {
+		if ( ! empty( $GLOBALS[ 'wp_super_cache_debug' ] ) ) {
 			wp_cache_debug( "Buffer is blank. Output buffer may have been corrupted by another plugin or this is a redirected URL. Look for text 'ob_start' in the files of your plugins directory.", 2 );
 			wp_cache_add_to_buffer( $buffer, "Page not cached by WP Super Cache. Blank Page. Check output buffer usage by plugins." );
 		}
@@ -1967,7 +1966,7 @@ function wp_cache_get_ob(&$buffer) {
 
 	if ( isset( $wp_super_cache_query[ 'is_404' ] ) && false == apply_filters( 'wpsupercache_404', false ) ) {
 		$new_cache = false;
-		if ( isset( $GLOBALS[ 'wp_super_cache_debug' ] ) && $GLOBALS[ 'wp_super_cache_debug' ] ) {
+		if ( ! empty( $GLOBALS[ 'wp_super_cache_debug' ] ) ) {
 			wp_cache_debug( '404 file not found not cached', 2 );
 			wp_cache_add_to_buffer( $buffer, "Page not cached by WP Super Cache. 404." );
 		}
@@ -1975,7 +1974,7 @@ function wp_cache_get_ob(&$buffer) {
 
 	if ( !preg_match( apply_filters( 'wp_cache_eof_tags', '/(<\/html>|<\/rss>|<\/feed>|<\/urlset|<\?xml)/i' ), $buffer ) ) {
 		$new_cache = false;
-		if ( isset( $GLOBALS[ 'wp_super_cache_debug' ] ) && $GLOBALS[ 'wp_super_cache_debug' ] ) {
+		if ( ! empty( $GLOBALS[ 'wp_super_cache_debug' ] ) ) {
 			wp_cache_debug( 'No closing html tag. Not caching.', 2 );
 			wp_cache_add_to_buffer( $buffer, "Page not cached by WP Super Cache. No closing HTML tag. Check your theme." );
 		}
@@ -2247,7 +2246,7 @@ function wp_cache_get_ob(&$buffer) {
 		}
 	}
 
-	if ( $added_cache && isset( $wp_supercache_cache_list ) && $wp_supercache_cache_list ) {
+	if ( $added_cache && ! empty( $wp_supercache_cache_list ) ) {
 		update_option( 'wpsupercache_count', ( get_option( 'wpsupercache_count' ) + 1 ) );
 		$last_urls = (array)get_option( 'supercache_last_cached' );
 		if ( count( $last_urls ) >= 10 )
@@ -2954,8 +2953,7 @@ function wp_cache_post_change( $post_id ) {
 	}
 
 	if (
-		isset( $wp_cache_refresh_single_only ) &&
-		$wp_cache_refresh_single_only &&
+		! empty( $wp_cache_refresh_single_only ) &&
 		(
 			isset( $_SERVER['HTTP_REFERER'] ) &&
 			strpos( $_SERVER['HTTP_REFERER'], 'edit-comments.php' ) ||
