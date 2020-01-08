@@ -506,7 +506,7 @@ function wp_cache_check_mobile( $cache_key ) {
 		return $cache_key . '-' . 'wap';
 	}
 
-	if (isset($_SERVER['ALL_HTTP']) && strpos(strtolower($_SERVER['ALL_HTTP']), 'operamini') !== false) {
+	if ( isset($_SERVER['ALL_HTTP']) && stripos( $_SERVER['ALL_HTTP'], 'operamini' ) !== false) {
 		return $cache_key . '-' . 'operamini';
 	}
 
